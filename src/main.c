@@ -3,80 +3,8 @@
 #include <math.h>
 #include "uthash.h"
 #include "raylib.h"
-
-#define TITLE "PunchProto"
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 768
-#define SCREEN_HALF_W SCREEN_WIDTH/2
-#define SCREEN_HALF_H SCREEN_HEIGHT/2
-
-// Test Macros
-#define FLIPPED 180
-#define BOUNDS 0.5
-#define FRAME_LIMIT 16
-
-typedef enum {
-  North,
-  South,
-  West,
-  East
-} Direction;
-
-typedef struct {
-  float width;
-  float height;
-} Size2;
-
-typedef struct {
-  int column;
-  int row;
-} Table2;
-
-typedef struct {
-  float speed;
-  float strength;
-  float health;
-} BoxerStats;
-
-typedef enum {
-  Idle,
-  Walk,
-  Jab
-} AnimationState;
-
-typedef struct {
-  // DO NOT USE THIS YET, OVERENGINEERED! I REALLY ONLY NEED TO STORE FRAMES, ACTIVE, LOOP BOOLEAN, AND OTHER SPECIAL PROPERTIES.. NOT THIS! TODO: REWORK!
-  int state;
-  int frameCount;
-  Vector2 frames[FRAME_LIMIT];
-  UT_hash_handle hh;
-} Frameset;
-
-typedef struct {
-  Vector2 frames;
-  Vector2 currentFrameset[FRAME_LIMIT];
-  int index;
-  int count;
-  bool shouldLoop;
-  float speed; // Put this to the actual frameset struct later, in milliseconds
-  float currentAnimationTime;
-} Animations;
-
-typedef struct {
-  Rectangle collisionBox;
-  Texture2D texture;
-  Vector2 position;
-  Animations animations;
-  Size2 size;
-  Color tint;
-  float rotation;
-  float scale;
-} BoxerSpecs;
-
-typedef struct {
-  BoxerSpecs specs;
-  BoxerStats stats;
-} Boxer;
+#include "types.h"
+#include "animations.h"
 
 void initSpecs(Boxer* newBoxer) {
   SetTextureFilter(newBoxer->specs.texture, TEXTURE_FILTER_POINT);
@@ -129,35 +57,6 @@ void setFacing(Boxer* boxer, Direction dir) {
 void setFacingByAngle(Boxer* boxer, float angle) {
   boxer->specs.rotation = angle;
 }
-
-void setCurrentFrameset(Boxer* boxer, Vector2* frameset, int count) {
-  boxer->specs.animations.count = count;
-  for (int i = 0; i < count; i++) {
-      boxer->specs.animations.currentFrameset[i] = frameset[i];
-  }
-}
-
-void animationReset(Boxer* boxer) {
-  Animations* anims = &boxer->specs.animations;
-  if(anims->currentAnimationTime >= anims->speed) {
-    anims->currentAnimationTime = 0;
-  } else {
-    anims->currentAnimationTime += GetFrameTime();
-  }
-}
-
-void frameIteration(Boxer* boxer) {
-  Animations* anims = &boxer->specs.animations;
-  anims->frames = anims->currentFrameset[anims->index];
-
-  if(anims->currentAnimationTime >= anims->speed) {
-    anims->index++;
-    if(anims->index >= anims->count) {
-      anims->index = 0;
-    }
-  }
-}
-
 
 void drawBoxer(Boxer boxer) {
   // setup the animation on source later
