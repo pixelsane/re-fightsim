@@ -1,0 +1,16 @@
+# Object files
+*.o
+*.obj
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Debug files
+*.log
+*.dSYM/
+*.stackdump
+
+# project ideas
+.idea/
