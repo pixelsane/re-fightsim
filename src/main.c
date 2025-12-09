@@ -45,20 +45,28 @@ typedef enum {
 } AnimationState;
 
 typedef struct {
+  // DO NOT USE THIS YET, OVERENGINEERED! I REALLY ONLY NEED TO STORE FRAMES, ACTIVE, LOOP BOOLEAN, AND OTHER SPECIAL PROPERTIES.. NOT THIS! TODO: REWORK!
   int state;
   int frameCount;
-  Table2 frames[FRAME_LIMIT];
+  Vector2 frames[FRAME_LIMIT];
   UT_hash_handle hh;
 } Frameset;
 
-typedef Frameset* Animations;
+typedef struct {
+  Vector2 frames;
+  Vector2 currentFrameset[FRAME_LIMIT];
+  int index;
+  int count;
+  bool shouldLoop;
+  float speed; // Put this to the actual frameset struct later, in milliseconds
+  float currentAnimationTime;
+} Animations;
 
 typedef struct {
   Rectangle collisionBox;
   Texture2D texture;
   Vector2 position;
-  Animations* animations;
-  Table2 frames;
+  Animations animations;
   Size2 size;
   Color tint;
   float rotation;
@@ -71,13 +79,17 @@ typedef struct {
 } Boxer;
 
 void initSpecs(Boxer* newBoxer) {
+  SetTextureFilter(newBoxer->specs.texture, TEXTURE_FILTER_POINT);
   newBoxer->specs.position = (Vector2){SCREEN_HALF_W, SCREEN_HALF_H};
-  newBoxer->specs.frames = (Table2){0,0};
+  newBoxer->specs.animations.frames = (Vector2){0,0};
+  newBoxer->specs.animations.index = 0;
+  newBoxer->specs.animations.count = 1;
+  newBoxer->specs.animations.speed = 0.5;
+  //newBoxer->specs.animations.currentFrameset = {{0,0}};
   newBoxer->specs.size = (Size2){64,64};
   newBoxer->specs.tint = RAYWHITE;
   newBoxer->specs.rotation = 0;
   newBoxer->specs.scale = 1;
-  newBoxer->specs.animations = NULL;
 }
 
 void initStats(Boxer* newBoxer) {
@@ -118,12 +130,40 @@ void setFacingByAngle(Boxer* boxer, float angle) {
   boxer->specs.rotation = angle;
 }
 
+void setCurrentFrameset(Boxer* boxer, Vector2* frameset, int count) {
+  boxer->specs.animations.count = count;
+  for (int i = 0; i < count; i++) {
+      boxer->specs.animations.currentFrameset[i] = frameset[i];
+  }
+}
+
+void animationReset(Boxer* boxer) {
+  Animations* anims = &boxer->specs.animations;
+  if(anims->currentAnimationTime >= anims->speed) {
+    anims->currentAnimationTime = 0;
+  } else {
+    anims->currentAnimationTime += GetFrameTime();
+  }
+}
+
+void frameIteration(Boxer* boxer) {
+  Animations* anims = &boxer->specs.animations;
+  anims->frames = anims->currentFrameset[anims->index];
+
+  if(anims->currentAnimationTime >= anims->speed) {
+    anims->index++;
+    if(anims->index >= anims->count) {
+      anims->index = 0;
+    }
+  }
+}
+
 
 void drawBoxer(Boxer boxer) {
   // setup the animation on source later
-  Table2 frames = boxer.specs.frames;
-  int frameX = frames.row * boxer.specs.size.width;
-  int frameY = frames.column * boxer.specs.size.height;
+  Vector2 frames = boxer.specs.animations.frames;
+  int frameX = frames.x * boxer.specs.size.width;
+  int frameY = frames.y * boxer.specs.size.height;
   Rectangle source = {frameX, frameY, boxer.specs.size.width, boxer.specs.size.height};
   Rectangle dest = {boxer.specs.position.x, boxer.specs.position.y, boxer.specs.size.width, boxer.specs.size.height};
   Vector2 origin = {dest.width/2, dest.height/2};
@@ -132,7 +172,8 @@ void drawBoxer(Boxer boxer) {
 }
 
 void updateBoxer(Boxer* boxer) {
-  
+  frameIteration(boxer);
+  animationReset(boxer);
 }
 
 void setupRelativePosition(Boxer* blue, Boxer* red) {
@@ -166,16 +207,17 @@ Boxer testBoxer;
 Boxer testBoxer2;
 
 void init() {
-  static const Table2 testIdleFrames[] = {{0,0}};
-  static const Table2 testJabFrames[] = {{0,0}, {1,0}};
-
   testBoxer = initBoxer("assets/tdchartemp.png");
   testBoxer2 = initBoxer("assets/tdchartemp.png");
-
   setupRelativePosition(&testBoxer2, &testBoxer);
 
   setFacing(&testBoxer, North);
   setFacing(&testBoxer2, South);
+
+  Vector2 testIdleFrames[] = {{0,0}};
+  Vector2 testJabFrames[] = {{0,0}, {1,0}, {0,0}};
+  setCurrentFrameset(&testBoxer2, testIdleFrames, 1);
+  setCurrentFrameset(&testBoxer, testJabFrames, 3);
 }
 
 void cleanup() {
@@ -185,6 +227,7 @@ void cleanup() {
 void update() {
   //stepForward(&testBoxer);
   //stepForward(&testBoxer2);
+  updateBoxer(&testBoxer);
 }
 
 void drawTestHealth(Boxer boxer, float x) {
