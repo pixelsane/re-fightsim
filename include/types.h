@@ -39,6 +39,7 @@ typedef enum {
 
 typedef struct {
   Rectangle shape[FRAME_LIMIT];
+  int shapeCount;
   bool isAlwaysActive;
 } FrameBox;
 
@@ -52,6 +53,8 @@ typedef struct {
   float currentAnimationTime;
   FrameBox hitbox;
   FrameBox hurtbox;
+  bool shouldDisplayHitbox;
+  bool shouldDisplayHurtbox;
 } Animations;
 
 typedef struct {

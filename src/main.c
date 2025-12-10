@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include "types.h"
 #include "animations.h"
+#include "animationFrames.h"
 #include "transform.h"
 #include "rendering.h"
 
@@ -19,6 +20,9 @@ void init() {
 
   setCurrentFrameset(&testBoxer2, IDLE_FRAMES, IDLE_FRAMES_COUNT);
   setCurrentFrameset(&testBoxer, JAB_FRAMES, JAB_FRAMES_COUNT);
+  setCurrentHurtbox(&testBoxer, JAB_HURTBOX);
+
+  enableFrameDisplay(&testBoxer);
 }
 
 void cleanup() {
@@ -41,6 +45,7 @@ void draw() {
   animateBoxer(testBoxer2);
   displayTestHealth(testBoxer, 0);
   displayTestHealth(testBoxer2, 830);
+  displayHurtbox(testBoxer);
 }
 
 int main(void) {
