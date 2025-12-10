@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -Iinclude -Wall -g
-SRC = $(wildcard src/*.c)
+CFLAGS = -Iinclude -Idata -Wall -g
+SRC = $(wildcard src/*.c) $(wildcard data/*.c)
 OBJ = $(SRC:.c=.o)
 OUT = game
 
@@ -11,4 +11,4 @@ $(OUT): $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f src/*.o $(OUT)
+	rm -f src/*.o data/*.o $(OUT)

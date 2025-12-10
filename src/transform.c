@@ -8,7 +8,7 @@ void initSpecs(Boxer* newBoxer) {
   newBoxer->specs.animations.frames = (Vector2){0,0};
   newBoxer->specs.animations.index = 0;
   newBoxer->specs.animations.count = 1;
-  newBoxer->specs.animations.speed = 0.5;
+  newBoxer->specs.animations.speed = 0.1;
   //newBoxer->specs.animations.currentFrameset = {{0,0}};
   newBoxer->specs.size = (Size2){64,64};
   newBoxer->specs.tint = RAYWHITE;

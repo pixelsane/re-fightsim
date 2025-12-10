@@ -17,10 +17,8 @@ void init() {
   setFacing(&testBoxer, North);
   setFacing(&testBoxer2, South);
 
-  Vector2 testIdleFrames[] = {{0,0}};
-  Vector2 testJabFrames[] = {{0,0}, {1,0}, {0,0}};
-  setCurrentFrameset(&testBoxer2, testIdleFrames, 1);
-  setCurrentFrameset(&testBoxer, testJabFrames, 3);
+  setCurrentFrameset(&testBoxer2, IDLE_FRAMES, IDLE_FRAMES_COUNT);
+  setCurrentFrameset(&testBoxer, JAB_FRAMES, JAB_FRAMES_COUNT);
 }
 
 void cleanup() {

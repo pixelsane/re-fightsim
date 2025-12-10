@@ -1,7 +1,6 @@
-#include "raylib.h"
-
 #ifndef TYPES_H
 #define TYPES_H
+#include "raylib.h"
 
 #define TITLE "PunchProto"
 #define SCREEN_WIDTH 1024
@@ -27,11 +26,6 @@ typedef struct {
 } Size2;
 
 typedef struct {
-  int column;
-  int row;
-} Table2;
-
-typedef struct {
   float speed;
   float strength;
   float health;
@@ -44,13 +38,20 @@ typedef enum {
 } AnimationState;
 
 typedef struct {
+  Rectangle shape[FRAME_LIMIT];
+  bool isAlwaysActive;
+} FrameBox;
+
+typedef struct {
   Vector2 frames;
   Vector2 currentFrameset[FRAME_LIMIT];
   int index;
   int count;
   bool shouldLoop;
-  float speed; // Put this to the actual frameset struct later, in milliseconds
+  float speed;
   float currentAnimationTime;
+  FrameBox hitbox;
+  FrameBox hurtbox;
 } Animations;
 
 typedef struct {
