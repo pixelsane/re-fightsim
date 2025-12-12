@@ -1,6 +1,7 @@
 #include "animations.h"
 #include "types.h"
 #include "math.h"
+#include "utils.h"
 
 void setCurrentFrameset(Boxer* boxer, const Vector2* frameset, const int count) {
   boxer->specs.animations.count = count;
@@ -42,29 +43,14 @@ void displayHitbox(Boxer boxer) {
       return;
     }
   }
+
   Rectangle hb = anims.hitbox.shape[idx];
   float originX = boxer.specs.size.width * 0.5f;
   float originY = boxer.specs.size.height * 0.5f;
 
-  // Get the four corners of the hitbox relative to character origin
-  float localX = hb.x - originX;
-  float localY = hb.y - originY;
-  
-  float rad = boxer.specs.rotation * (PI / 180.0f);  // Convert to radians
-  float cosA = cosf(rad);
-  float sinA = sinf(rad);
-  
-  // Rotate and translate the four corners
   Vector2 corners[4];
-  float xs[4] = {localX, localX + hb.width, localX + hb.width, localX};
-  float ys[4] = {localY, localY, localY + hb.height, localY + hb.height};
-  
-  for (int i = 0; i < 4; i++) {
-    corners[i].x = pos.x + (xs[i] * cosA - ys[i] * sinA);
-    corners[i].y = pos.y + (xs[i] * sinA + ys[i] * cosA);
-  }
-  
-  // Draw the rotated rectangle
+  setRectangleCorners(hb, pos, boxer.specs.rotation, originX, originY, corners);
+
   DrawLineV(corners[0], corners[1], YELLOW);
   DrawLineV(corners[1], corners[2], YELLOW);
   DrawLineV(corners[2], corners[3], YELLOW);
@@ -89,24 +75,12 @@ void displayHurtbox(Boxer boxer) {
   float originX = boxer.specs.size.width * 0.5f;
   float originY = boxer.specs.size.height * 0.5f;
 
-  float localX = hb.x - originX;
-  float localY = hb.y - originY;
-  
-  float rad = boxer.specs.rotation * (PI / 180.0f);  // Convert to radians
-  float cosA = cosf(rad);
-  float sinA = sinf(rad);
-  
-  // Rotate and translate the four corners
+
+  float rad = boxer.specs.rotation * (PI / 180.0f);
+
   Vector2 corners[4];
-  float xs[4] = {localX, localX + hb.width, localX + hb.width, localX};
-  float ys[4] = {localY, localY, localY + hb.height, localY + hb.height};
-  
-  for (int i = 0; i < 4; i++) {
-    corners[i].x = pos.x + (xs[i] * cosA - ys[i] * sinA);
-    corners[i].y = pos.y + (xs[i] * sinA + ys[i] * cosA);
-  }
-  
-  // Draw the rotated rectangle
+  setRectangleCorners(hb, pos, boxer.specs.rotation, originX, originY, corners);
+
   DrawLineV(corners[0], corners[1], RED);
   DrawLineV(corners[1], corners[2], RED);
   DrawLineV(corners[2], corners[3], RED);
