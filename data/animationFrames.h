@@ -13,6 +13,12 @@
     isAlwaysActive: true
   };
 
+  static const FrameBox DEFAULT_HITBOX = {
+    shape: {{0,0,0,0}},
+    shapeCount: 1,
+    isAlwaysActive: true
+  };
+
   static const FrameBox JAB_HITBOX =  {
     shape: {{0,0,0,0}, {37,0,14,12}, {38,7,14,12}},
     shapeCount: 3,

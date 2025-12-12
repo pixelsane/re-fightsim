@@ -1,6 +1,8 @@
 #include "types.h"
 #include "transform.h"
 #include "math.h"
+#include "utils.h"
+#include "animationFrames.h"
 
 void initSpecs(Boxer* newBoxer) {
   SetTextureFilter(newBoxer->specs.texture, TEXTURE_FILTER_POINT);
@@ -9,11 +11,12 @@ void initSpecs(Boxer* newBoxer) {
   newBoxer->specs.animations.index = 0;
   newBoxer->specs.animations.count = 1;
   newBoxer->specs.animations.speed = 0.1;
-  //newBoxer->specs.animations.currentFrameset = {{0,0}};
   newBoxer->specs.size = (Size2){64,64};
   newBoxer->specs.tint = RAYWHITE;
   newBoxer->specs.rotation = 0;
   newBoxer->specs.scale = 1;
+  setCurrentHurtbox(newBoxer, DEFAULT_HURTBOX);
+  setCurrentHitbox(newBoxer, DEFAULT_HITBOX);
 }
 
 void initStats(Boxer* newBoxer) {

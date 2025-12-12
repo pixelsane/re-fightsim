@@ -10,16 +10,6 @@ void setCurrentFrameset(Boxer* boxer, const Vector2* frameset, const int count) 
   }
 }
 
-void setCurrentHurtbox(Boxer* boxer, const FrameBox hurtbox) {
-  Animations* animations = &boxer->specs.animations;
-  animations->hurtbox = hurtbox;
-}
-
-void setCurrentHitbox(Boxer* boxer, const FrameBox hitbox) {
-  Animations* animations = &boxer->specs.animations;
-  animations->hitbox = hitbox;
-}
-
 void animationReset(Boxer* boxer) {
   Animations* anims = &boxer->specs.animations;
   if(anims->currentAnimationTime >= anims->speed) {
@@ -74,9 +64,6 @@ void displayHurtbox(Boxer boxer) {
   Rectangle hb = anims.hurtbox.shape[idx];
   float originX = boxer.specs.size.width * 0.5f;
   float originY = boxer.specs.size.height * 0.5f;
-
-
-  float rad = boxer.specs.rotation * (PI / 180.0f);
 
   Vector2 corners[4];
   setRectangleCorners(hb, pos, boxer.specs.rotation, originX, originY, corners);

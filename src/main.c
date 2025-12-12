@@ -6,6 +6,7 @@
 #include "animationFrames.h"
 #include "transform.h"
 #include "rendering.h"
+#include "utils.h"
 
 Boxer testBoxer;
 Boxer testBoxer2;
@@ -19,11 +20,14 @@ void init() {
   setFacing(&testBoxer2, South);
 
   setCurrentFrameset(&testBoxer2, IDLE_FRAMES, IDLE_FRAMES_COUNT);
+  setCurrentHurtbox(&testBoxer2, DEFAULT_HURTBOX);
+
   setCurrentFrameset(&testBoxer, JAB_FRAMES, JAB_FRAMES_COUNT);
   setCurrentHurtbox(&testBoxer, JAB_HURTBOX);
   setCurrentHitbox(&testBoxer, JAB_HITBOX);
 
   enableFrameDisplay(&testBoxer);
+  enableFrameDisplay(&testBoxer2);
 }
 
 void cleanup() {
@@ -41,6 +45,7 @@ void update() {
   faceBoxer(&testBoxer, testBoxer2);
   faceBoxer(&testBoxer2, testBoxer);
   updateBoxer(&testBoxer);
+  updateBoxer(&testBoxer2);
 }
 
 void draw() {
@@ -51,6 +56,8 @@ void draw() {
   displayTestHealth(testBoxer2, 830);
   displayHurtbox(testBoxer);
   displayHitbox(testBoxer);
+  displayHurtbox(testBoxer2);
+  displayHitbox(testBoxer2);
 }
 
 int main(void) {
