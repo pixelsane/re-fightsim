@@ -1,5 +1,6 @@
 #include "animations.h"
 #include "types.h"
+#include "math.h"
 
 void setCurrentFrameset(Boxer* boxer, const Vector2* frameset, const int count) {
   boxer->specs.animations.count = count;
@@ -34,8 +35,7 @@ void displayHitbox(Boxer boxer) {
   if (!anims.shouldDisplayHitbox) return;
   int idx = anims.index;
   if (idx < 0) idx = 0;
-  if (idx >= anims.hurtbox.shapeCount) {
-    // If hitbox is marked always active and has at least one shape, fall back to frame 0
+  if (idx >= anims.hitbox.shapeCount) {
     if (anims.hitbox.isAlwaysActive && anims.hitbox.shapeCount > 0) {
       idx = 0;
     } else {
@@ -46,12 +46,29 @@ void displayHitbox(Boxer boxer) {
   float originX = boxer.specs.size.width * 0.5f;
   float originY = boxer.specs.size.height * 0.5f;
 
-  float x = pos.x - originX + hb.x;
-  float y = pos.y - originY + hb.y;
-  float width = hb.width;
-  float height = hb.height;
-
-  DrawRectangleLines((int)x, (int)y, (int)width, (int)height, YELLOW);
+  // Get the four corners of the hitbox relative to character origin
+  float localX = hb.x - originX;
+  float localY = hb.y - originY;
+  
+  float rad = boxer.specs.rotation * (PI / 180.0f);  // Convert to radians
+  float cosA = cosf(rad);
+  float sinA = sinf(rad);
+  
+  // Rotate and translate the four corners
+  Vector2 corners[4];
+  float xs[4] = {localX, localX + hb.width, localX + hb.width, localX};
+  float ys[4] = {localY, localY, localY + hb.height, localY + hb.height};
+  
+  for (int i = 0; i < 4; i++) {
+    corners[i].x = pos.x + (xs[i] * cosA - ys[i] * sinA);
+    corners[i].y = pos.y + (xs[i] * sinA + ys[i] * cosA);
+  }
+  
+  // Draw the rotated rectangle
+  DrawLineV(corners[0], corners[1], YELLOW);
+  DrawLineV(corners[1], corners[2], YELLOW);
+  DrawLineV(corners[2], corners[3], YELLOW);
+  DrawLineV(corners[3], corners[0], YELLOW);
 }
 
 void displayHurtbox(Boxer boxer) {
@@ -62,7 +79,6 @@ void displayHurtbox(Boxer boxer) {
   int idx = anims.index;
   if (idx < 0) idx = 0;
   if (idx >= anims.hurtbox.shapeCount) {
-    // If hurtbox is marked always active and has at least one shape, fall back to frame 0
     if (anims.hurtbox.isAlwaysActive && anims.hurtbox.shapeCount > 0) {
       idx = 0;
     } else {
@@ -73,12 +89,28 @@ void displayHurtbox(Boxer boxer) {
   float originX = boxer.specs.size.width * 0.5f;
   float originY = boxer.specs.size.height * 0.5f;
 
-  float x = pos.x - originX + hb.x;
-  float y = pos.y - originY + hb.y;
-  float width = hb.width;
-  float height = hb.height;
-
-  DrawRectangleLines((int)x, (int)y, (int)width, (int)height, RED);
+  float localX = hb.x - originX;
+  float localY = hb.y - originY;
+  
+  float rad = boxer.specs.rotation * (PI / 180.0f);  // Convert to radians
+  float cosA = cosf(rad);
+  float sinA = sinf(rad);
+  
+  // Rotate and translate the four corners
+  Vector2 corners[4];
+  float xs[4] = {localX, localX + hb.width, localX + hb.width, localX};
+  float ys[4] = {localY, localY, localY + hb.height, localY + hb.height};
+  
+  for (int i = 0; i < 4; i++) {
+    corners[i].x = pos.x + (xs[i] * cosA - ys[i] * sinA);
+    corners[i].y = pos.y + (xs[i] * sinA + ys[i] * cosA);
+  }
+  
+  // Draw the rotated rectangle
+  DrawLineV(corners[0], corners[1], RED);
+  DrawLineV(corners[1], corners[2], RED);
+  DrawLineV(corners[2], corners[3], RED);
+  DrawLineV(corners[3], corners[0], RED);
 }
 
 void frameIteration(Boxer* boxer) {
