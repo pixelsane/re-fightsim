@@ -13,4 +13,5 @@
   void stepBackward(Boxer* boxer);
   void stepRight(Boxer* boxer);
   void stepLeft(Boxer* boxer);
+  void faceBoxer(Boxer* source, Boxer target);
 #endif

@@ -94,3 +94,10 @@ void stepRight(Boxer* boxer) {
   boxer->specs.position.x += right.x;
   boxer->specs.position.y += right.y;
 }
+
+void faceBoxer(Boxer* source, Boxer target) {
+  Vector2 sourcePos = source->specs.position;
+  Vector2 targetPos = target.specs.position;
+  float rad = atan2(targetPos.x - sourcePos.x, sourcePos.y - targetPos.y);
+  source->specs.rotation = rad * (180.0f / PI);
+}

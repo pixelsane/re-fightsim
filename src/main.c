@@ -35,9 +35,11 @@ void updateBoxer(Boxer* boxer) {
   animationReset(boxer);
 }
 void update() {
-  //stepForward(&testBoxer);
-  //stepForward(&testBoxer2);
+  stepForward(&testBoxer);
+  stepForward(&testBoxer2);
   stepLeft(&testBoxer2);
+  faceBoxer(&testBoxer, testBoxer2);
+  faceBoxer(&testBoxer2, testBoxer);
   updateBoxer(&testBoxer);
 }
 
