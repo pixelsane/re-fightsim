@@ -3,5 +3,5 @@
 #include "types.h"
 #include "raylib.h"
   void displayTestHealth(Boxer boxer, float x);
-  void animateBoxer(Boxer boxer);
+  void renderBoxer(Boxer boxer);
 #endif

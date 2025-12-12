@@ -21,6 +21,7 @@ void init() {
   setCurrentFrameset(&testBoxer2, IDLE_FRAMES, IDLE_FRAMES_COUNT);
   setCurrentFrameset(&testBoxer, JAB_FRAMES, JAB_FRAMES_COUNT);
   setCurrentHurtbox(&testBoxer, JAB_HURTBOX);
+  setCurrentHitbox(&testBoxer, JAB_HITBOX);
 
   enableFrameDisplay(&testBoxer);
 }
@@ -41,11 +42,12 @@ void update() {
 
 void draw() {
   ClearBackground(GRAY);
-  animateBoxer(testBoxer);
-  animateBoxer(testBoxer2);
+  renderBoxer(testBoxer);
+  renderBoxer(testBoxer2);
   displayTestHealth(testBoxer, 0);
   displayTestHealth(testBoxer2, 830);
   displayHurtbox(testBoxer);
+  displayHitbox(testBoxer);
 }
 
 int main(void) {

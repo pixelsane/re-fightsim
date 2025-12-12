@@ -9,7 +9,7 @@ void displayTestHealth(Boxer boxer, float x) {
   DrawText(buffer, x, 0, 24, RAYWHITE);
 }
 
-void animateBoxer(Boxer boxer) {
+void renderBoxer(Boxer boxer) {
   Vector2 frames = boxer.specs.animations.frames;
   int frameX = frames.x * boxer.specs.size.width;
   int frameY = frames.y * boxer.specs.size.height;

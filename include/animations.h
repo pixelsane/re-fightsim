@@ -7,5 +7,6 @@
   void animationReset(Boxer* boxer);
   void frameIteration(Boxer* boxer);
   void displayHurtbox(Boxer boxer);
+  void displayHitbox(Boxer boxer);
   void enableFrameDisplay(Boxer* boxer);
 #endif

@@ -27,6 +27,33 @@ void animationReset(Boxer* boxer) {
   }
 }
 
+void displayHitbox(Boxer boxer) {
+  Animations anims = boxer.specs.animations;
+  Vector2 pos = boxer.specs.position;
+
+  if (!anims.shouldDisplayHitbox) return;
+  int idx = anims.index;
+  if (idx < 0) idx = 0;
+  if (idx >= anims.hurtbox.shapeCount) {
+    // If hitbox is marked always active and has at least one shape, fall back to frame 0
+    if (anims.hitbox.isAlwaysActive && anims.hitbox.shapeCount > 0) {
+      idx = 0;
+    } else {
+      return;
+    }
+  }
+  Rectangle hb = anims.hitbox.shape[idx];
+  float originX = boxer.specs.size.width * 0.5f;
+  float originY = boxer.specs.size.height * 0.5f;
+
+  float x = pos.x - originX + hb.x;
+  float y = pos.y - originY + hb.y;
+  float width = hb.width;
+  float height = hb.height;
+
+  DrawRectangleLines((int)x, (int)y, (int)width, (int)height, YELLOW);
+}
+
 void displayHurtbox(Boxer boxer) {
   Animations anims = boxer.specs.animations;
   Vector2 pos = boxer.specs.position;
