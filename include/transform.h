@@ -11,4 +11,6 @@
   Vector2 getStepSpeed(Boxer* boxer);
   void stepForward(Boxer* boxer);
   void stepBackward(Boxer* boxer);
+  void stepRight(Boxer* boxer);
+  void stepLeft(Boxer* boxer);
 #endif

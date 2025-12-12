@@ -37,6 +37,7 @@ void updateBoxer(Boxer* boxer) {
 void update() {
   //stepForward(&testBoxer);
   //stepForward(&testBoxer2);
+  stepLeft(&testBoxer2);
   updateBoxer(&testBoxer);
 }
 

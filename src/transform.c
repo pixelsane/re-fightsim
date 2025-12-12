@@ -80,3 +80,17 @@ void stepBackward(Boxer* boxer) {
   boxer->specs.position.x -= stepSpeed.x;
   boxer->specs.position.y -= stepSpeed.y; 
 }
+
+void stepLeft(Boxer* boxer) {
+  Vector2 v = getStepSpeed(boxer);
+  Vector2 left = (Vector2){ -v.y, v.x };
+  boxer->specs.position.x += left.x;
+  boxer->specs.position.y += left.y;
+}
+
+void stepRight(Boxer* boxer) {
+  Vector2 v = getStepSpeed(boxer);
+  Vector2 right = (Vector2){ v.y, -v.x };
+  boxer->specs.position.x += right.x;
+  boxer->specs.position.y += right.y;
+}
